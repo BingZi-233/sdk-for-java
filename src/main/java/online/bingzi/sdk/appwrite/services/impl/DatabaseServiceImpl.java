@@ -4,6 +4,9 @@ import online.bingzi.sdk.appwrite.Client;
 import online.bingzi.sdk.appwrite.models.Collection;
 import online.bingzi.sdk.appwrite.models.Database;
 import online.bingzi.sdk.appwrite.models.Document;
+import online.bingzi.sdk.appwrite.models.response.CollectionList;
+import online.bingzi.sdk.appwrite.models.response.DatabaseList;
+import online.bingzi.sdk.appwrite.models.response.DocumentList;
 import online.bingzi.sdk.appwrite.services.DatabaseService;
 import retrofit2.Call;
 
@@ -26,7 +29,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public Call<List<Database>> listDatabases() {
+    public Call<DatabaseList> listDatabases() {
         return databaseService.listDatabases();
     }
 
@@ -46,7 +49,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public Call<List<Collection>> listCollections(String databaseId) {
+    public Call<CollectionList> listCollections(String databaseId) {
         return databaseService.listCollections(databaseId);
     }
 
@@ -66,7 +69,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public Call<List<Document<Map<String, Object>>>> listDocuments(String databaseId, String collectionId) {
+    public Call<DocumentList<Map<String, Object>>> listDocuments(String databaseId, String collectionId) {
         return databaseService.listDocuments(databaseId, collectionId);
     }
 

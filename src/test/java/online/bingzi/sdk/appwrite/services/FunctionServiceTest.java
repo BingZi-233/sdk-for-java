@@ -5,6 +5,8 @@ import okhttp3.mockwebserver.RecordedRequest;
 import online.bingzi.sdk.appwrite.BaseTest;
 import online.bingzi.sdk.appwrite.models.Execution;
 import online.bingzi.sdk.appwrite.models.Function;
+import online.bingzi.sdk.appwrite.models.response.ExecutionList;
+import online.bingzi.sdk.appwrite.models.response.FunctionList;
 import online.bingzi.sdk.appwrite.services.impl.FunctionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,13 +72,17 @@ class FunctionServiceTest extends BaseTest {
     @Test
     void listFunctions() throws Exception {
         // 准备模拟响应
+        String mockResponse = "{\n" +
+                "    \"total\": 1,\n" +
+                "    \"functions\": [" + loadJsonFromResource("function") + "]\n" +
+                "}";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("[" + loadJsonFromResource("function") + "]")
+                .setBody(mockResponse)
                 .addHeader("Content-Type", "application/json"));
 
         // 执行请求
-        Response<List<Function>> response = functionService.listFunctions().execute();
+        Response<FunctionList> response = functionService.listFunctions().execute();
 
         // 验证请求
         RecordedRequest request = mockWebServer.takeRequest();
@@ -85,12 +91,15 @@ class FunctionServiceTest extends BaseTest {
 
         // 验证响应
         assertTrue(response.isSuccessful());
-        List<Function> functions = response.body();
+        FunctionList functionList = response.body();
+        assertNotNull(functionList);
+        assertEquals(1, functionList.getTotal());
+        List<Function> functions = functionList.getFunctions();
         assertNotNull(functions);
         assertEquals(1, functions.size());
         Function function = functions.get(0);
         assertEquals("5e5ea5c16897e", function.getId());
-        assertEquals("hello-world", function.getName());
+        assertEquals("Test Function", function.getName());
     }
 
     @Test
@@ -205,13 +214,17 @@ class FunctionServiceTest extends BaseTest {
     @Test
     void listExecutions() throws Exception {
         // 准备模拟响应
+        String mockResponse = "{\n" +
+                "    \"total\": 1,\n" +
+                "    \"executions\": [" + loadJsonFromResource("execution") + "]\n" +
+                "}";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("[" + loadJsonFromResource("execution") + "]")
+                .setBody(mockResponse)
                 .addHeader("Content-Type", "application/json"));
 
         // 执行请求
-        Response<List<Execution>> response = functionService.listExecutions("test-function").execute();
+        Response<ExecutionList> response = functionService.listExecutions("test-function").execute();
 
         // 验证请求
         RecordedRequest request = mockWebServer.takeRequest();
@@ -220,7 +233,10 @@ class FunctionServiceTest extends BaseTest {
 
         // 验证响应
         assertTrue(response.isSuccessful());
-        List<Execution> executions = response.body();
+        ExecutionList executionList = response.body();
+        assertNotNull(executionList);
+        assertEquals(1, executionList.getTotal());
+        List<Execution> executions = executionList.getExecutions();
         assertNotNull(executions);
         assertEquals(1, executions.size());
         Execution execution = executions.get(0);

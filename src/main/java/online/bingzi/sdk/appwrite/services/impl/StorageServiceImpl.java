@@ -1,12 +1,11 @@
 package online.bingzi.sdk.appwrite.services.impl;
 
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import online.bingzi.sdk.appwrite.Client;
 import online.bingzi.sdk.appwrite.models.Bucket;
 import online.bingzi.sdk.appwrite.models.File;
+import online.bingzi.sdk.appwrite.models.response.BucketList;
+import online.bingzi.sdk.appwrite.models.response.FileList;
 import online.bingzi.sdk.appwrite.services.StorageService;
 import retrofit2.Call;
 
@@ -31,7 +30,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public Call<List<Bucket>> listBuckets() {
+    public Call<BucketList> listBuckets() {
         return storageService.listBuckets();
     }
 
@@ -52,7 +51,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public Call<List<File>> listFiles(String bucketId) {
+    public Call<FileList> listFiles(String bucketId) {
         return storageService.listFiles(bucketId);
     }
 

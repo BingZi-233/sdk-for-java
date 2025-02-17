@@ -5,6 +5,8 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import online.bingzi.sdk.appwrite.models.Bucket;
 import online.bingzi.sdk.appwrite.models.File;
+import online.bingzi.sdk.appwrite.models.response.BucketList;
+import online.bingzi.sdk.appwrite.models.response.FileList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,13 +90,17 @@ class StorageServiceTest {
     @Test
     void listBuckets() throws Exception {
         // 准备模拟响应
+        String mockResponse = "{\n" +
+                "    \"total\": 1,\n" +
+                "    \"buckets\": [" + loadJsonFromResource("storage_bucket") + "]\n" +
+                "}";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("[" + loadJsonFromResource("storage_bucket") + "]")
+                .setBody(mockResponse)
                 .addHeader("Content-Type", "application/json"));
 
         // 执行请求
-        Response<List<Bucket>> response = storageService.listBuckets().execute();
+        Response<BucketList> response = storageService.listBuckets().execute();
 
         // 验证请求
         RecordedRequest request = mockWebServer.takeRequest();
@@ -103,7 +109,10 @@ class StorageServiceTest {
 
         // 验证响应
         assertTrue(response.isSuccessful());
-        List<Bucket> buckets = response.body();
+        BucketList bucketList = response.body();
+        assertNotNull(bucketList);
+        assertEquals(1, bucketList.getTotal());
+        List<Bucket> buckets = bucketList.getBuckets();
         assertNotNull(buckets);
         assertEquals(1, buckets.size());
         Bucket bucket = buckets.get(0);
@@ -199,13 +208,17 @@ class StorageServiceTest {
     @Test
     void listFiles() throws Exception {
         // 准备模拟响应
+        String mockResponse = "{\n" +
+                "    \"total\": 1,\n" +
+                "    \"files\": [" + loadJsonFromResource("storage_file") + "]\n" +
+                "}";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("[" + loadJsonFromResource("storage_file") + "]")
+                .setBody(mockResponse)
                 .addHeader("Content-Type", "application/json"));
 
         // 执行请求
-        Response<List<File>> response = storageService.listFiles("test-bucket").execute();
+        Response<FileList> response = storageService.listFiles("test-bucket").execute();
 
         // 验证请求
         RecordedRequest request = mockWebServer.takeRequest();
@@ -214,7 +227,10 @@ class StorageServiceTest {
 
         // 验证响应
         assertTrue(response.isSuccessful());
-        List<File> files = response.body();
+        FileList fileList = response.body();
+        assertNotNull(fileList);
+        assertEquals(1, fileList.getTotal());
+        List<File> files = fileList.getFiles();
         assertNotNull(files);
         assertEquals(1, files.size());
         File file = files.get(0);

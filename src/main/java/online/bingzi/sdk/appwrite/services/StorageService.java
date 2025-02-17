@@ -2,6 +2,8 @@ package online.bingzi.sdk.appwrite.services;
 
 import online.bingzi.sdk.appwrite.models.Bucket;
 import online.bingzi.sdk.appwrite.models.File;
+import online.bingzi.sdk.appwrite.models.response.BucketList;
+import online.bingzi.sdk.appwrite.models.response.FileList;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -136,7 +138,7 @@ public interface StorageService {
      * @return 包含存储桶列表的Call对象
      */
     @GET("storage/buckets")
-    Call<List<Bucket>> listBuckets();
+    Call<BucketList> listBuckets();
 
     /**
      * 获取存储桶信息
@@ -199,7 +201,7 @@ public interface StorageService {
      * @return 包含文件列表的Call对象
      */
     @GET("storage/buckets/{bucketId}/files")
-    Call<List<File>> listFiles(@Path("bucketId") String bucketId);
+    Call<FileList> listFiles(@Path("bucketId") String bucketId);
 
     /**
      * 获取文件信息

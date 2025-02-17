@@ -2,6 +2,7 @@ package online.bingzi.sdk.appwrite.services.impl;
 
 import online.bingzi.sdk.appwrite.Client;
 import online.bingzi.sdk.appwrite.models.User;
+import online.bingzi.sdk.appwrite.models.response.SessionList;
 import online.bingzi.sdk.appwrite.services.AccountService;
 import retrofit2.Call;
 
@@ -60,5 +61,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Call<Void> deleteSessions() {
         return accountService.deleteSessions();
+    }
+
+    @Override
+    public Call<SessionList> listSessions() {
+        return accountService.listSessions();
     }
 } 

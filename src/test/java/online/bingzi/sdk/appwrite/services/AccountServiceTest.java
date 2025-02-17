@@ -4,6 +4,7 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.RecordedRequest;
 import online.bingzi.sdk.appwrite.BaseTest;
 import online.bingzi.sdk.appwrite.models.User;
+import online.bingzi.sdk.appwrite.models.response.SessionList;
 import online.bingzi.sdk.appwrite.services.impl.AccountServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -254,5 +255,30 @@ class AccountServiceTest extends BaseTest {
 
         // 验证响应
         assertTrue(response.isSuccessful());
+    }
+
+    @Test
+    void listSessions() throws Exception {
+        // 准备模拟响应
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .setBody(loadJsonFromResource("session_list"))
+                .addHeader("Content-Type", "application/json"));
+
+        // 执行请求
+        Response<SessionList> response = accountService.listSessions().execute();
+
+        // 验证请求
+        RecordedRequest request = mockWebServer.takeRequest();
+        assertEquals("GET", request.getMethod());
+        assertEquals("/v1/account/sessions", request.getPath());
+
+        // 验证响应
+        assertTrue(response.isSuccessful());
+        SessionList sessionList = response.body();
+        assertNotNull(sessionList);
+        assertTrue(sessionList.getTotal() > 0);
+        assertNotNull(sessionList.getSessions());
+        assertFalse(sessionList.getSessions().isEmpty());
     }
 } 

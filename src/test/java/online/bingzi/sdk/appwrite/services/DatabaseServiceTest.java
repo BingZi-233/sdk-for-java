@@ -6,6 +6,9 @@ import online.bingzi.sdk.appwrite.BaseTest;
 import online.bingzi.sdk.appwrite.models.Collection;
 import online.bingzi.sdk.appwrite.models.Database;
 import online.bingzi.sdk.appwrite.models.Document;
+import online.bingzi.sdk.appwrite.models.response.CollectionList;
+import online.bingzi.sdk.appwrite.models.response.DatabaseList;
+import online.bingzi.sdk.appwrite.models.response.DocumentList;
 import online.bingzi.sdk.appwrite.services.impl.DatabaseServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,13 +66,17 @@ class DatabaseServiceTest extends BaseTest {
     @Test
     void listDatabases() throws Exception {
         // 准备模拟响应
+        String mockResponse = "{\n" +
+                "    \"total\": 1,\n" +
+                "    \"databases\": [" + loadJsonFromResource("database") + "]\n" +
+                "}";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("[" + loadJsonFromResource("database") + "]")
+                .setBody(mockResponse)
                 .addHeader("Content-Type", "application/json"));
 
         // 执行请求
-        Response<List<Database>> response = databaseService.listDatabases().execute();
+        Response<DatabaseList> response = databaseService.listDatabases().execute();
 
         // 验证请求
         RecordedRequest request = mockWebServer.takeRequest();
@@ -78,7 +85,10 @@ class DatabaseServiceTest extends BaseTest {
 
         // 验证响应
         assertTrue(response.isSuccessful());
-        List<Database> databases = response.body();
+        DatabaseList databaseList = response.body();
+        assertNotNull(databaseList);
+        assertEquals(1, databaseList.getTotal());
+        List<Database> databases = databaseList.getDatabases();
         assertNotNull(databases);
         assertEquals(1, databases.size());
         Database database = databases.get(0);
@@ -166,13 +176,17 @@ class DatabaseServiceTest extends BaseTest {
     @Test
     void listCollections() throws Exception {
         // 准备模拟响应
+        String mockResponse = "{\n" +
+                "    \"total\": 1,\n" +
+                "    \"collections\": [" + loadJsonFromResource("collection") + "]\n" +
+                "}";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("[" + loadJsonFromResource("collection") + "]")
+                .setBody(mockResponse)
                 .addHeader("Content-Type", "application/json"));
 
         // 执行请求
-        Response<List<Collection>> response = databaseService.listCollections("test-db").execute();
+        Response<CollectionList> response = databaseService.listCollections("test-db").execute();
 
         // 验证请求
         RecordedRequest request = mockWebServer.takeRequest();
@@ -181,7 +195,10 @@ class DatabaseServiceTest extends BaseTest {
 
         // 验证响应
         assertTrue(response.isSuccessful());
-        List<Collection> collections = response.body();
+        CollectionList collectionList = response.body();
+        assertNotNull(collectionList);
+        assertEquals(1, collectionList.getTotal());
+        List<Collection> collections = collectionList.getCollections();
         assertNotNull(collections);
         assertEquals(1, collections.size());
         Collection collection = collections.get(0);
@@ -281,13 +298,17 @@ class DatabaseServiceTest extends BaseTest {
     @Test
     void listDocuments() throws Exception {
         // 准备模拟响应
+        String mockResponse = "{\n" +
+                "    \"total\": 1,\n" +
+                "    \"documents\": [" + loadJsonFromResource("document") + "]\n" +
+                "}";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("[" + loadJsonFromResource("document") + "]")
+                .setBody(mockResponse)
                 .addHeader("Content-Type", "application/json"));
 
         // 执行请求
-        Response<List<Document<Map<String, Object>>>> response = databaseService.listDocuments(
+        Response<DocumentList<Map<String, Object>>> response = databaseService.listDocuments(
                 "test-db",
                 "test-collection"
         ).execute();
@@ -299,7 +320,10 @@ class DatabaseServiceTest extends BaseTest {
 
         // 验证响应
         assertTrue(response.isSuccessful());
-        List<Document<Map<String, Object>>> documents = response.body();
+        DocumentList<Map<String, Object>> documentList = response.body();
+        assertNotNull(documentList);
+        assertEquals(1, documentList.getTotal());
+        List<Document<Map<String, Object>>> documents = documentList.getDocuments();
         assertNotNull(documents);
         assertEquals(1, documents.size());
         Document<Map<String, Object>> document = documents.get(0);
@@ -346,7 +370,7 @@ class DatabaseServiceTest extends BaseTest {
         // 执行请求
         Map<String, Object> data = new HashMap<>();
         data.put("name", "Jane Doe");
-        data.put("age", 25);
+        data.put("age", 28);
 
         Response<Document<Map<String, Object>>> response = databaseService.updateDocument(
                 "test-db",
@@ -362,7 +386,7 @@ class DatabaseServiceTest extends BaseTest {
         assertEquals("/v1/databases/test-db/collections/test-collection/documents/test-doc", request.getPath());
         String body = request.getBody().readUtf8();
         assertTrue(body.contains("Jane Doe"));
-        assertTrue(body.contains("25"));
+        assertTrue(body.contains("28"));
         assertTrue(body.contains("read"));
         assertTrue(body.contains("write"));
 
@@ -371,6 +395,7 @@ class DatabaseServiceTest extends BaseTest {
         Document<Map<String, Object>> document = response.body();
         assertNotNull(document);
         assertEquals("5e5ea5c16897e", document.getId());
+        assertEquals("John Doe", document.getData().get("name"));
     }
 
     @Test

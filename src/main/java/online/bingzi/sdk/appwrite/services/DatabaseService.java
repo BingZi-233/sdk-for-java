@@ -3,6 +3,9 @@ package online.bingzi.sdk.appwrite.services;
 import online.bingzi.sdk.appwrite.models.Collection;
 import online.bingzi.sdk.appwrite.models.Database;
 import online.bingzi.sdk.appwrite.models.Document;
+import online.bingzi.sdk.appwrite.models.response.CollectionList;
+import online.bingzi.sdk.appwrite.models.response.DatabaseList;
+import online.bingzi.sdk.appwrite.models.response.DocumentList;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -117,7 +120,7 @@ public interface DatabaseService {
      * @return 包含数据库列表的Call对象
      */
     @GET("databases")
-    Call<List<Database>> listDatabases();
+    Call<DatabaseList> listDatabases();
 
     /**
      * 获取数据库信息
@@ -179,7 +182,7 @@ public interface DatabaseService {
      * @return 包含集合列表的Call对象
      */
     @GET("databases/{databaseId}/collections")
-    Call<List<Collection>> listCollections(@Path("databaseId") String databaseId);
+    Call<CollectionList> listCollections(@Path("databaseId") String databaseId);
 
     /**
      * 获取集合信息
@@ -253,7 +256,7 @@ public interface DatabaseService {
      * @return 包含文档列表的Call对象
      */
     @GET("databases/{databaseId}/collections/{collectionId}/documents")
-    Call<List<Document<Map<String, Object>>>> listDocuments(
+    Call<DocumentList<Map<String, Object>>> listDocuments(
             @Path("databaseId") String databaseId,
             @Path("collectionId") String collectionId
     );

@@ -5,6 +5,8 @@ import okhttp3.mockwebserver.RecordedRequest;
 import online.bingzi.sdk.appwrite.BaseTest;
 import online.bingzi.sdk.appwrite.models.Membership;
 import online.bingzi.sdk.appwrite.models.Team;
+import online.bingzi.sdk.appwrite.models.response.MembershipList;
+import online.bingzi.sdk.appwrite.models.response.TeamList;
 import online.bingzi.sdk.appwrite.services.impl.TeamServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,13 +64,17 @@ class TeamServiceTest extends BaseTest {
     @Test
     void listTeams() throws Exception {
         // 准备模拟响应
+        String mockResponse = "{\n" +
+                "    \"total\": 1,\n" +
+                "    \"teams\": [" + loadJsonFromResource("team") + "]\n" +
+                "}";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("[" + loadJsonFromResource("team") + "]")
+                .setBody(mockResponse)
                 .addHeader("Content-Type", "application/json"));
 
         // 执行请求
-        Response<List<Team>> response = teamService.listTeams().execute();
+        Response<TeamList> response = teamService.listTeams().execute();
 
         // 验证请求
         RecordedRequest request = mockWebServer.takeRequest();
@@ -77,7 +83,10 @@ class TeamServiceTest extends BaseTest {
 
         // 验证响应
         assertTrue(response.isSuccessful());
-        List<Team> teams = response.body();
+        TeamList teamList = response.body();
+        assertNotNull(teamList);
+        assertEquals(1, teamList.getTotal());
+        List<Team> teams = teamList.getTeams();
         assertNotNull(teams);
         assertEquals(1, teams.size());
         Team team = teams.get(0);
@@ -157,13 +166,17 @@ class TeamServiceTest extends BaseTest {
     @Test
     void listMemberships() throws Exception {
         // 准备模拟响应
+        String mockResponse = "{\n" +
+                "    \"total\": 1,\n" +
+                "    \"memberships\": [" + loadJsonFromResource("membership") + "]\n" +
+                "}";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("[" + loadJsonFromResource("membership") + "]")
+                .setBody(mockResponse)
                 .addHeader("Content-Type", "application/json"));
 
         // 执行请求
-        Response<List<Membership>> response = teamService.listMemberships("test-team").execute();
+        Response<MembershipList> response = teamService.listMemberships("test-team").execute();
 
         // 验证请求
         RecordedRequest request = mockWebServer.takeRequest();
@@ -172,7 +185,10 @@ class TeamServiceTest extends BaseTest {
 
         // 验证响应
         assertTrue(response.isSuccessful());
-        List<Membership> memberships = response.body();
+        MembershipList membershipList = response.body();
+        assertNotNull(membershipList);
+        assertEquals(1, membershipList.getTotal());
+        List<Membership> memberships = membershipList.getMemberships();
         assertNotNull(memberships);
         assertEquals(1, memberships.size());
         Membership membership = memberships.get(0);

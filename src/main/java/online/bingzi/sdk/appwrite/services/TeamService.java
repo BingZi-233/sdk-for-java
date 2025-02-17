@@ -2,6 +2,8 @@ package online.bingzi.sdk.appwrite.services;
 
 import online.bingzi.sdk.appwrite.models.Membership;
 import online.bingzi.sdk.appwrite.models.Team;
+import online.bingzi.sdk.appwrite.models.response.MembershipList;
+import online.bingzi.sdk.appwrite.models.response.TeamList;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -117,7 +119,7 @@ public interface TeamService {
      * @return 包含团队列表的Call对象
      */
     @GET("teams")
-    Call<List<Team>> listTeams();
+    Call<TeamList> listTeams();
 
     /**
      * 获取团队信息
@@ -174,7 +176,7 @@ public interface TeamService {
      * @return 包含成员列表的Call对象
      */
     @GET("teams/{teamId}/memberships")
-    Call<List<Membership>> listMemberships(@Path("teamId") String teamId);
+    Call<MembershipList> listMemberships(@Path("teamId") String teamId);
 
     /**
      * 创建团队成员

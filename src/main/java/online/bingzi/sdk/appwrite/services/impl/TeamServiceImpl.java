@@ -3,6 +3,8 @@ package online.bingzi.sdk.appwrite.services.impl;
 import online.bingzi.sdk.appwrite.Client;
 import online.bingzi.sdk.appwrite.models.Membership;
 import online.bingzi.sdk.appwrite.models.Team;
+import online.bingzi.sdk.appwrite.models.response.MembershipList;
+import online.bingzi.sdk.appwrite.models.response.TeamList;
 import online.bingzi.sdk.appwrite.services.TeamService;
 import retrofit2.Call;
 
@@ -25,7 +27,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Call<List<Team>> listTeams() {
+    public Call<TeamList> listTeams() {
         return teamService.listTeams();
     }
 
@@ -45,7 +47,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Call<List<Membership>> listMemberships(String teamId) {
+    public Call<MembershipList> listMemberships(String teamId) {
         return teamService.listMemberships(teamId);
     }
 

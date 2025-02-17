@@ -2,6 +2,8 @@ package online.bingzi.sdk.appwrite.services;
 
 import online.bingzi.sdk.appwrite.models.Execution;
 import online.bingzi.sdk.appwrite.models.Function;
+import online.bingzi.sdk.appwrite.models.response.ExecutionList;
+import online.bingzi.sdk.appwrite.models.response.FunctionList;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -124,7 +126,7 @@ public interface FunctionService {
      * @return 包含函数列表的Call对象
      */
     @GET("functions")
-    Call<List<Function>> listFunctions();
+    Call<FunctionList> listFunctions();
 
     /**
      * 获取函数信息
@@ -210,7 +212,7 @@ public interface FunctionService {
      * @return 包含执行记录列表的Call对象
      */
     @GET("functions/{functionId}/executions")
-    Call<List<Execution>> listExecutions(@Path("functionId") String functionId);
+    Call<ExecutionList> listExecutions(@Path("functionId") String functionId);
 
     /**
      * 获取函数执行信息

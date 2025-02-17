@@ -3,6 +3,8 @@ package online.bingzi.sdk.appwrite.services.impl;
 import online.bingzi.sdk.appwrite.Client;
 import online.bingzi.sdk.appwrite.models.Execution;
 import online.bingzi.sdk.appwrite.models.Function;
+import online.bingzi.sdk.appwrite.models.response.ExecutionList;
+import online.bingzi.sdk.appwrite.models.response.FunctionList;
 import online.bingzi.sdk.appwrite.services.FunctionService;
 import retrofit2.Call;
 
@@ -28,7 +30,7 @@ public class FunctionServiceImpl implements FunctionService {
     }
 
     @Override
-    public Call<List<Function>> listFunctions() {
+    public Call<FunctionList> listFunctions() {
         return functionService.listFunctions();
     }
 
@@ -56,7 +58,7 @@ public class FunctionServiceImpl implements FunctionService {
     }
 
     @Override
-    public Call<List<Execution>> listExecutions(String functionId) {
+    public Call<ExecutionList> listExecutions(String functionId) {
         return functionService.listExecutions(functionId);
     }
 

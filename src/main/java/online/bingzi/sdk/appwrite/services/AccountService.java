@@ -1,6 +1,7 @@
 package online.bingzi.sdk.appwrite.services;
 
 import online.bingzi.sdk.appwrite.models.User;
+import online.bingzi.sdk.appwrite.models.response.SessionList;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -207,4 +208,16 @@ public interface AccountService {
      */
     @DELETE("account/sessions")
     Call<Void> deleteSessions();
+
+    /**
+     * 获取会话列表
+     * <p>
+     * 获取当前用户的所有活跃会话。
+     * 返回的列表包含所有设备的会话信息。
+     * </p>
+     *
+     * @return 包含会话列表的Call对象
+     */
+    @GET("account/sessions")
+    Call<SessionList> listSessions();
 } 

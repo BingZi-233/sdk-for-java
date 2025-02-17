@@ -6,7 +6,7 @@
 
     <groupId>online.bingzi</groupId>
     <artifactId>sdk-for-java</artifactId>
-    <version>0.8</version>
+    <version>0.8-beta1</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -144,6 +144,7 @@
                             <encoding>UTF-8</encoding>
                             <charset>UTF-8</charset>
                             <additionalJOption>-Xdoclint:none</additionalJOption>
+                            <additionalJOption>-html5</additionalJOption>
                         </configuration>
                     </execution>
                 </executions>
